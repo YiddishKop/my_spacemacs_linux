@@ -88,7 +88,7 @@ values."
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode)
      zilongshanren
-     (chinese :packages youdao-dictionary fcitx
+     (chinese :packages youdao-dictionary fcitx pyim
               :variables chinese-enable-fcitx nil
               chinese-enable-youdao-dict t)
      )
@@ -96,17 +96,30 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(sicp)
+   dotspacemacs-additional-packages '(
+                                      sicp
+                                      blog-admin
+                                      uimage
+                                      ;; solve the bad-format mixing chinese font with english in org table
+                                      cnfonts
+                                      ;; dependencies for org-page
+                                      mustache
+                                      dash
+                                      simple-httpd
+                                      git
+                                      ht
+                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
+   ;; org-download deleted from this list
    '(magit-gh-pulls magit-gitflow  evil-mc realgud
                     evil-args evil-ediff evil-exchange evil-unimpaired
                     evil-indent-plus volatile-highlights smartparens
                     spaceline holy-mode skewer-mode rainbow-delimiters
                     highlight-indentation vi-tilde-fringe eyebrowse
                     org-bullets smooth-scrolling org-repo-todo org-timer
-                    livid-mode org-download git-gutter git-gutter-fringe  evil-escape
+                    livid-mode git-gutter git-gutter-fringe  evil-escape
                     leuven-theme gh-md evil-lisp-state spray lorem-ipsum symon
                     ac-ispell ace-jump-mode auto-complete auto-dictionary
                     clang-format define-word google-translate disaster epic
@@ -366,6 +379,19 @@ values."
 
 (defun dotspacemacs/user-config ()
 
+  ;; yiddi: add setting to support blog-admin
+  (use-package blog-admin
+    :init
+    (progn
+      ;; your config
+      (setq blog-admin-backend-type 'org-page)
+      (setq blog-admin-backend-path "~/blog")
+      (setq blog-admin-backend-new-post-in-drafts t)
+      (setq blog-admin-backend-new-post-with-same-name-dir t)
+      (setq blog-admin-backend-org-page-drafts "_drafts") ;; directory to save draft
+      (setq blog-admin-backend-org-page-config-file nil) ;; if nil init.el is used
+      ))
+
   ;; NEED execute the following two method MANUALLY, after emacs start
   ;; yiddi: for yasnippet expand trigger key
   ;; -----------------------------------------------------------
@@ -374,8 +400,7 @@ values."
   ;; MANULLY EXEC HERE--------------------------------------------------------
   (define-key yas-minor-mode-map (kbd "SPC") yas-maybe-expand)
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.6))
-  (setq org-src-tab-acts-natively t)
-  ;; MANULLY EXEC HERE--------------------------------------------------------
+  ;; manully EXEC HERE--------------------------------------------------------
   ;; (define-key yas-minor-mode-map (kbd "TAB") yas-maybe-expand)
   ;; (define-key yas-minor-mode-map (kbd "SPC") 'yas-expand)
   ;; ya/expand is obsoleted, using ya-expand instead
