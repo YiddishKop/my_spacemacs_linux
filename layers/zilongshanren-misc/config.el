@@ -23,7 +23,7 @@
                                             ("8zh" "@~chinese")
                                             ("8sp" "spacemacs")
                                             ;; email
-                                            ("8me" "guanghui8827@gmail.com")
+                                            ("8me" "yiddishkop@gmail.com")
 
                                             ;; computing tech
                                             ("8wp" "Wikipedia")

@@ -23,7 +23,7 @@
     ;; org-tree-slide
     ;; ox-reveal
     ;; worf
-    org-download
+    ;; org-download
     ;; plain-org-wiki
     )
   )
@@ -313,8 +313,8 @@ unwanted space when exporting org-mode to html."
                :exclude-tags ("ol" "noexport")
                :section-numbers nil
                :html-preamble ,zilongshanren-website-html-preamble
-               :author "zilongshanren"
-               :email "guanghui8827@gmail.com"
+               :author "yiddi"
+               :email "yiddishkop@gmail.com"
                :auto-sitemap t          ; Generate sitemap.org automagically...
                :sitemap-filename "index.org" ; ... call it sitemap.org (it's the default)...
                :sitemap-title "我的wiki"     ; ... with title 'Sitemap'.

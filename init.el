@@ -62,7 +62,9 @@ values."
      (osx :variables osx-dictionary-dictionary-choice "Simplified Chinese - English"
           osx-command-as 'super)
      restclient
-     (gtags :disabled-for clojure emacs-lisp javascript latex python shell-scripts)
+     ;; comment out 'python' from (gtags) by yiddi
+     ;; (gtags :disabled-for clojure emacs-lisp javascript latex python shell-scripts)
+     ;; (gtags :disabled-for clojure emacs-lisp javascript latex shell-scripts)
      (shell :variables shell-default-shell 'eshell)
      ;; docker
      latex
@@ -73,7 +75,10 @@ values."
      yaml
      react
      (python :variables
-             python-test-runner '(nose pytest))
+             python-test-runner '(nose pytest)
+             python-sort-imports-on-save t
+             python-enable-yapf-format-on-save t
+             )
      ;; (ruby :variables ruby-version-manager 'chruby)
      ;; ruby-on-rails
      lua
@@ -99,15 +104,17 @@ values."
    dotspacemacs-additional-packages '(
                                       sicp
                                       blog-admin
-                                      uimage
+                                      uimage ;; download url image
                                       ;; solve the bad-format mixing chinese font with english in org table
                                       cnfonts
                                       ;; dependencies for org-page
+                                      org-page
                                       mustache
                                       dash
                                       simple-httpd
                                       git
                                       ht
+                                      (pyim-greatdict :location (recipe :fetcher github :repo "tumashu/pyim-greatdict"))
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -199,10 +206,10 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 14
+                               :size 16
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.2)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -378,19 +385,105 @@ values."
 
 
 (defun dotspacemacs/user-config ()
+  ;; anaconda eldoc support
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+
+  ;; FIX the 'unable to run anaconda-mode server'
+  ;; https://github.com/proofit404/anaconda-mode#pythonpath
+  (add-to-list 'python-shell-extra-pythonpaths "~/git_repos")
+
+  ;; yiddi:add copy from chinese-pyim website setttings recommended by author
+  ;; pyim 默认没有携带任何拼音词库，用户可以使用下面几种方式，获取质量较好的拼音词库：
+  ;; 第一种方式 (懒人推荐使用)
+  ;; 获取其他 pyim 用户的拼音词库，比如，某个同学测试 pyim 时创建了一个中文拼音词库，词条数量大约60万。
+
+  ;; http://tumashu.github.io/pyim-bigdict/pyim-bigdict.pyim.gz
+
+  ;; 下载上述词库后，运行 `pyim-dicts-manager' ，按照命令提示，将下载得到的词库
+  ;; 文件信息添加到 `pyim-dicts' 中，最后运行命令 `pyim-restart' 或者重启 emacs，
+  ;; 这个词库使用 `utf-8-unix' 编码。vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+  (use-package chinese-pyim
+    :ensure nil
+    :config
+    ;; 激活 basedict 拼音词库
+    (use-package chinese-pyim-greatdict
+      :ensure nil
+      :config (chinese-pyim-greatdict-enable))
+
+    ;; 五笔用户使用 wbdict 词库
+    ;; (use-package chinese-pyim-wbdict
+    ;;   :ensure nil
+    ;;   :config (chinese-pyim-wbdict-gbk-enable))
+
+    (setq default-input-method "chinese-pyim")
+
+    ;; 我使用全拼
+    (setq pyim-default-scheme 'quanpin)
+
+    ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+    ;; 我自己使用的中英文动态切换规则是：
+    ;; 1. 光标只有在注释里面时，才可以输入中文。
+    ;; 2. 光标前是汉字字符时，才能输入中文。
+    ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+    (setq-default pyim-english-input-switch-functions
+                  '(pyim-probe-dynamic-english
+                    pyim-probe-isearch-mode
+                    pyim-probe-program-mode
+                    pyim-probe-org-structure-template))
+
+    (setq-default pyim-punctuation-half-width-functions
+                  '(pyim-probe-punctuation-line-beginning
+                    pyim-probe-punctuation-after-punctuation))
+
+    ;; 开启拼音搜索功能
+    (setq pyim-isearch-enable-pinyin-search t)
+
+    ;; 使用 pupup-el 来绘制选词框
+    (setq pyim-page-tooltip 'popup)
+
+    ;; 选词框显示5个候选词
+    (setq pyim-page-length 5)
+
+    ;; 让 Emacs 启动时自动加载 pyim 词库
+    (add-hook 'emacs-startup-hook
+              #'(lambda () (pyim-restart-1 t)))
+    :bind
+    (("M-p" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
+     ("C-;" . pyim-delete-word-from-personal-buffer)))
+  ;; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
 
   ;; yiddi: add setting to support blog-admin
   (use-package blog-admin
     :init
+    ;; yiddi: I think settings below is useless.
     (progn
       ;; your config
       (setq blog-admin-backend-type 'org-page)
-      (setq blog-admin-backend-path "~/blog")
+      (setq blog-admin-backend-path "/home/yiddi/blog")
       (setq blog-admin-backend-new-post-in-drafts t)
       (setq blog-admin-backend-new-post-with-same-name-dir t)
       (setq blog-admin-backend-org-page-drafts "_drafts") ;; directory to save draft
-      (setq blog-admin-backend-org-page-config-file nil) ;; if nil init.el is used
+      (setq blog-admin-backend-org-page-config-file "/home/yiddi/.spacemacs.d/org_page_config.el" ) ;; if nil init.el is used
       ))
+
+  (use-package org-page
+    :init
+    (progn
+      ;; your config
+      (setq op/repository-directory "/home/yiddi/YiddishKop.github.io") ;; the repository location
+      (setq op/site-domain "http://yiddishkop.github.io/") ;; your domain
+;;; the configuration below you should choose one, not both
+      (setq op/personal-disqus-shortname "kopyiddish") ;; your disqus commenting system
+      (setq op/hashover-comments t) ;; activate hashover self-hosted comment system
+      (setq op/personal-github-link "https://github.com/YiddishKop")
+      (setq op/category-ignore-list '("category1" "category2"))
+      (setq op/site-main-title "yiddishkop's blog")
+      (setq op/site-sub-title "回首向来萧瑟处，归去，也无风雨也无晴")
+      ))
+
 
   ;; NEED execute the following two method MANUALLY, after emacs start
   ;; yiddi: for yasnippet expand trigger key
