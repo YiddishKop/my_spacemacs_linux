@@ -57,8 +57,16 @@
   (add-hook 'org-mode-hook (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
   (with-eval-after-load 'org
     (progn
-      
-      (spacemacs|disable-company org-mode)
+
+      ;; yiddi
+      ;; comment follow line to support company in org-src-block edit special buffer
+      ;; (spacemacs|disable-company org-mode)
+      (spacemacs|add-company-backends
+        :backends company-anaconda
+        :modes org-mode
+        :append-hooks nil
+        :call-hooks t)
+
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "," 'org-priority)
       (require 'org-compat)
@@ -201,7 +209,7 @@
        '((perl . t)
          (ruby . t)
          (scala . t)
-         (sh . t)
+         (shell . t)
          (dot . t)
          (js . t)
          (latex .t)
