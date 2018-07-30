@@ -61,12 +61,6 @@
       ;; yiddi
       ;; comment follow line to support company in org-src-block edit special buffer
       ;; (spacemacs|disable-company org-mode)
-      (spacemacs|add-company-backends
-        :backends company-anaconda
-        :modes org-mode
-        :append-hooks nil
-        :call-hooks t)
-
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "," 'org-priority)
       (require 'org-compat)

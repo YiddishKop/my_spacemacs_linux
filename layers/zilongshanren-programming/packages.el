@@ -125,7 +125,7 @@
 (defun zilongshanren-programming/post-init-python ()
   (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   ;; if you use pyton3, then you could comment the following line
-  ;; (setq python-shell-interpreter "python")
+  (setq python-shell-interpreter "/home/yiddi/anaconda3/envs/tensorflow/bin/ipython3")
   )
 
 (defun zilongshanren-programming/post-init-js-doc ()
@@ -528,7 +528,16 @@
           company-idle-delay 0.08)
 
     (when (configuration-layer/package-usedp 'company)
-      (spacemacs|add-company-backends :modes shell-script-mode makefile-bsdmake-mode sh-mode lua-mode nxml-mode conf-unix-mode json-mode graphviz-dot-mode))
+      ;; yiddi: add ob-ipython-mode
+      (spacemacs|add-company-backends :modes ob-ipython-mode shell-script-mode makefile-bsdmake-mode sh-mode lua-mode nxml-mode conf-unix-mode json-mode graphviz-dot-mode)
+      ;; yiddi: add company-backends to ob-ipython-mode
+      ;; too slow, i comment out the company-ob-ipython
+      ;; (spacemacs|add-company-backends
+      ;;   :backends company-ob-ipython
+      ;;   :modes ob-ipython-mode
+      ;;   :append-hooks nil
+      ;;   :call-hooks t)
+      )
     ))
 (defun zilongshanren-programming/post-init-company-c-headers ()
   (progn

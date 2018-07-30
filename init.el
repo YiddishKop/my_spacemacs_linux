@@ -104,6 +104,7 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
+                                      ob-async ;; I ues it for execute shell script in a async way
                                       sicp
                                       ;; blog-admin
                                       uimage ;; download url image
@@ -116,7 +117,6 @@ values."
                                       simple-httpd
                                       git
                                       ht
-                                      (pyim-greatdict :location (recipe :fetcher github :repo "tumashu/pyim-greatdict"))
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -395,7 +395,38 @@ values."
   ;; FIX the 'unable to run anaconda-mode server'
   ;; https://github.com/proofit404/anaconda-mode#pythonpath
   ;; (add-to-list 'python-shell-extra-pythonpaths "~/git_repos")
+  ;; ==============================================================
+
+
+  ;; ob-ipython settings not prompt when I run the src block
   ;; --------------------------------------------------------------
+  (setq org-confirm-babel-evaluate nil)
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+  (setq org-confirm-babel-evaluate nil)
+
+  ;; setup the company backends of ob-ipython-mode in
+  ;; zilongshanren-programming/post-init-company
+
+  ;; define key for ob-ipython-inspect
+  ;; example of binding keys only when html-mode is active
+  (with-eval-after-load 'ob-ipython
+    (define-key ob-ipython-mode-map (kbd "M-.") #'ob-ipython-inspect))
+  (evil-leader/set-key
+    "mi" 'ob-ipython-inspect
+    )
+  ;; ==============================================================
+
+
+  ;; 设置 python anaconda env 运行目录
+  ;; 每次在 org 中运行 src-block 之前都要先从 menu bar-->Virtual Envs 选择你要的 env
+  ;; --------------------------------------------------------------
+  ;; anconda env 下的ipython目录在
+  ;; /home/yiddi/anaconda3/envs/tensorflow/lib/python3.6/site-packages/IPython/core/profile
+  ;; 这里,你可以设置 ipython startup
+  ;; --------------------------------------------------------------
+  (setenv "WORKON_HOME" "/home/yiddi/anaconda3/envs")
+  (pyvenv-mode 1)
+
 
   ;; org-page(static blogging)
   ;; --------------------------------------------------------------
@@ -437,9 +468,11 @@ values."
   ;; 解决org表格里面中英文对齐的问题
   ;; --------------------------------------------------------------------------------
   ;; for linux
-  (when (configuration-layer/layer-usedp 'chinese)
-    (when (and (spacemacs/system-is-linux) window-system)
-      (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB W3" 14 16)))
+  ;; (when (configuration-layer/layer-usedp 'chinese)
+  ;;   (when (and (spacemacs/system-is-linux) window-system)
+  ;;     (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB W3" 14 16)))
+  (when (spacemacs/system-is-linux)
+    (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB W3" 14 16))
   ;; for windows
   (when (and (spacemacs/system-is-mswindows) window-system)
     (setq ispell-program-name "aspell")

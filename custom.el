@@ -34,7 +34,7 @@
  '(org-agenda-custom-commands nil)
  '(org-agenda-files
    (quote
-    ("~/git_repos/on_ml_wushanghong/ml/labs/10_TensorFlow101_Word2Vec/10_TensorFlow101_Word2Vec.org" "/home/yiddi/org-notes/brainstom.org" "/home/yiddi/org-notes/changshi.org" "/home/yiddi/org-notes/gtd.org" "/home/yiddi/org-notes/journal.org" "/home/yiddi/org-notes/leetcode.org" "/home/yiddi/org-notes/notes.org" "/home/yiddi/org-notes/question.org" "/home/yiddi/org-notes/snippet.org" "/home/yiddi/org-notes/unicode.org")))
+    ("~/git_repos/on_ml_wushanghong/ml/labs/10_TensorFlow101_Word2Vec/10_TensorFlow101_Word2Vec.org" "/home/yiddi/org-notes/brainstom.org" "/home/yiddi/org-notes/gtd.org" "/home/yiddi/org-notes/journal.org" "/home/yiddi/org-notes/leetcode.org" "/home/yiddi/org-notes/notes.org" "/home/yiddi/org-notes/question.org" "/home/yiddi/org-notes/snippet.org" "/home/yiddi/org-notes/unicode.org")))
  '(org-agenda-ndays 1)
  '(org-agenda-show-all-dates t)
  '(org-agenda-skip-deadline-if-done t)
