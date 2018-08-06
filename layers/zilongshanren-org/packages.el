@@ -21,7 +21,7 @@
     ;;                        :fetcher github
     ;;                        :repo "codefalling/blog-admin"))
     ;; org-tree-slide
-    ;; ox-reveal
+    ox-reveal
     ;; worf
     ;; org-download
     ;; plain-org-wiki
@@ -434,8 +434,11 @@ holding contextual information."
     :defer t))
 
 (defun zilongshanren-org/post-init-ox-reveal ()
-  (setq org-reveal-root "file:///Users/guanghui/.emacs.d/reveal-js"))
-
+  ;; (setq org-reveal-root "file:///Users/guanghui/.emacs.d/reveal-js"))
+  ;; yiddi , add my personal path
+  (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+  (setq org-reveal-mathjax t)
+  )
 
 (defun zilongshanren-org/init-org-tree-slide ()
   (use-package org-tree-slide

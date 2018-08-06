@@ -71,7 +71,9 @@ values."
      latex
      deft
      markdown
-     (org :variables org-want-todo-bindings t)
+     (org :variables
+          org-want-todo-bindings t
+          org-enable-reveal-js-support t)
      gpu
      yaml
      react
@@ -104,6 +106,7 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
+                                      ethan-wspace ;; I use it to highlight tab/whitespace/newilne symbol
                                       ob-async ;; I ues it for execute shell script in a async way
                                       sicp
                                       ;; blog-admin
@@ -388,6 +391,7 @@ values."
 
 
 (defun dotspacemacs/user-config ()
+  (setq org-reveal-root "file:///home/yiddi/.spacemacs.d/reveal.js")
   ;; anaconda for python settings
   ;; --------------------------------------------------------------
   ;; anaconda eldoc support
