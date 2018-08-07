@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: tfzeros
+# key: tfzeros
+# --
+${1:name} = tf.zeros([$2, $3], ${4:$$(yas-choose-value '("tf.int32"  "tf.float32"  "tf.float64"))})
+$0

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: tfones
+# key: tfones
+# --
+${1:name} = tf.ones([${2:row}, ${3:col}], ${4:type$$(yas-choose-value '("tf.int32" "tf.float32" "tf.float64"))})
+$0

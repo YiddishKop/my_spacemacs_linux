@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: fileem
+# key: fileem
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
+# --
+if not os.path.exists(${1:logs_dir}):
+    os.makedirs($1)

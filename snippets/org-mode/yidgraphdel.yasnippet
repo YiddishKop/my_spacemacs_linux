@@ -1,0 +1,53 @@
+# -*- mode: snippet -*-
+# name: yidgraphdel
+# key: yidgraphdel
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
+# --
+
+#+NAME: process-to-avoid-reload-graph
+#+BEGIN_SRC ipython :tangle yes :noweb yes :session lec4-3 :exports code :results raw drawer
+   <<get-pid>>
+   <<kill-pid>>
+   <<del-graph-summary>>
+   <<tensorboard-run>>
+   <<run-tensorboard>>
+#+END_SRC
+
+#+RESULTS: process-to-avoid-reload-graph
+:RESULTS:
+# Out[4]:
+:END:
+
+#+name: get-pid
+#+BEGIN_SRC shell :results outputs
+ps -aux | grep "python" | grep -E "(default|lec4|tensorboard)" | grep -v "grep" | awk '{print $2}'
+#+END_SRC
+
+#+RESULTS: get-pid
+|  6675 |
+| 11038 |
+| 11044 |
+| 32122 |
+
+#+name: kill-pid
+#+BEGIN_SRC elisp :results outpout :var pid=get-pid
+  ;; 取元素
+  (defun r1l(tbl)
+    (mapcar (lambda (x) (number-to-string (car x))) tbl)
+    )
+  ;; (print pid)
+  ;; (print (reduce-one-layer pid))
+  (mapcar #'shell-command-to-string
+          (mapcar (lambda (x) (concat "kill " x)) (r1l pid))))
+#+END_SRC
+
+#+RESULTS: kill-pid
+|   |   |   |   |
+
+#+name: del-graph-summary
+#+BEGIN_SRC shell :results output
+  rm -rf /home/yiddi/git_repos/on_ml_tensorflow/logs/*
+  ls /home/yiddi/git_repos/on_ml_tensorflow/logs
+#+END_SRC
+
+#+RESULTS: del-graph-summary
