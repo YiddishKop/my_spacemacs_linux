@@ -31,11 +31,11 @@
         js-doc
         lua-mode
         (cc-mode :location built-in)
-        ;; flycheck-clojure
+        flycheck-clojure
         ;; etags-select
         (python :location built-in)
         (emacs-lisp :location built-in)
-        ;; clojure-mode
+        clojure-mode
         company
         (eldoc :location built-in)
         dumb-jump

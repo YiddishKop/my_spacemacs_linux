@@ -207,6 +207,7 @@
          (dot . t)
          (js . t)
          (latex .t)
+         (haskell . t)
          (python . t)
          (ipython . t)
          (emacs-lisp . t)
@@ -289,49 +290,83 @@ unwanted space when exporting org-mode to html."
                 (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
                 ))))
 
-      (defvar zilongshanren-website-html-preamble
-        "<div class='nav'>
-<ul>
-<li><a href='http://zilongshanren.com'>博客</a></li>
-<li><a href='/index.html'>Wiki目录</a></li>
-</ul>
-</div>")
+;;       (defvar zilongshanren-website-html-preamble
+;;         "<div class='nav'>
+;; <ul>
+;; <li><a href='http://yiddishkop.github.io'>博客</a></li>
+;; <li><a href='/index.html'>Wiki目录</a></li>
+;; </ul>
+;; </div>")
+
+      (defvar yiddi-website-html-preamble
+        "
+	<nav id='navbar'>
+		<div class='container'>
+			<ul>
+				<li><a href='https://yiddishkop.github.io/'>Home</a></li>
+				<li><a href='#'>FP</a></li>
+				<li><a href='#'>DataScience</a></li>
+				<li><a href='#'>BigData</a></li>
+				<li><a href='#'>CS</a></li>
+				<li><a href='#'>Emacs</a></li>
+				<li><a href='#'>life</a></li>
+				<li><a href='https://yiddishkop.github.io/YIDDI_reme/resume_of_webpage_cn.html'>About</a></li>
+			</ul>
+		</div>
+	</nav>
+"
+        )
+
+
       (defvar zilongshanren-website-html-blog-head
-        " <link rel='stylesheet' href='css/site.css' type='text/css'/> \n
+        " <link rel='stylesheet' href='css/style.css' type='text/css'/> \n
     <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/worg.css\"/>")
+
+      ;; yiddi: add
+      (defvar yiddi-website-html-blog-head
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/site.css\"/>")
+      ;; yiddi: add
+      (setq yiddi-blog-dir "/home/yiddi/YiddishKop.github.io/")
+      (setq yiddi-blog-cache "/home/yiddi/git_repos/blog_cache/")
       (setq org-publish-project-alist
             `(
-              ("blog-notes"
-               :base-directory "~/org-notes"
+              ("yiddi-article"
+               :base-directory "/home/yiddi/git_repos/blog_cache/函数式编程/初探<<群论>>"
                :base-extension "org"
-               :publishing-directory "~/org-notes/public_html/"
+               :publishing-directory "/home/yiddi/YiddishKop.github.io/函数式编程/初探<<群论>>"
 
                :recursive t
-               :html-head , zilongshanren-website-html-blog-head
+               :html-head , yiddi-website-html-blog-head
                :publishing-function org-html-publish-to-html
                :headline-levels 4       ; Just the default for this project.
                :auto-preamble t
-               :exclude "gtd.org"
                :exclude-tags ("ol" "noexport")
-               :section-numbers nil
-               :html-preamble ,zilongshanren-website-html-preamble
+               :section-numbers t
+               ;; :html-preamble ,zilongshanren-website-html-preamble
                :author "yiddi"
                :email "yiddishkop@gmail.com"
                :auto-sitemap t          ; Generate sitemap.org automagically...
+               :html-link-home "yidishkop.github.io"
+               :html-link-up "index.html"
+               ;; :makeindex t
                :sitemap-filename "index.org" ; ... call it sitemap.org (it's the default)...
-               :sitemap-title "我的wiki"     ; ... with title 'Sitemap'.
-               :sitemap-sort-files anti-chronologically
+               :sitemap-title "Articles"     ; ... with title 'Sitemap'.
+               :sitemap-sort-files alphabetically
                :sitemap-file-entry-format "%t" ; %d to output date, we don't need date here
                )
-              ("blog-static"
-               :base-directory "~/org-notes"
+              ("yiddi-static"
+               :base-directory "/home/yiddi/git_repos/blog_cache/函数式编程/初探<<群论>>"
                :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-               :publishing-directory "~/org-notes/public_html/"
+               :publishing-directory "/home/yiddi/YiddishKop.github.io/函数式编程/初探<<群论>>"
                :recursive t
                :publishing-function org-publish-attachment
                )
-              ("blog" :components ("blog-notes" "blog-static"))))
-
+              ("yiddi-blog" :components ("yiddi-article" "yiddi-static"))
+              )
+            )
+      ;;  set this variable t will make org publish the modified file
+      ;;  set this variable nil will make org publish the all file
+      (setq org-publish-use-timestamps-flag nil)
 
 
       (add-hook 'org-after-todo-statistics-hook 'zilong/org-summary-todo)

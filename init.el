@@ -31,9 +31,13 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     haskell
+     spacemacs-language
      ;; yiddi
      ipython-notebook
+     ;; yiddi add for synchronize with gist
      ;; yiddi
+     github
      scala
      ivy
      better-defaults
@@ -92,7 +96,8 @@ values."
                  typescript-fmt-on-save nil
                  typescript-fmt-tool 'typescript-formatter)
      emacs-lisp
-     (clojure :variables clojure-enable-fancify-symbols t)
+     (clojure :variables
+              clojure-enable-fancify-symbols t)
      racket
      (c-c++ :variables
             c-c++-default-mode-for-headers 'c++-mode)
@@ -106,6 +111,7 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
+                                      camcorder ;; for screencast recording in gif
                                       ethan-wspace ;; I use it to highlight tab/whitespace/newilne symbol
                                       ob-async ;; I ues it for execute shell script in a async way
                                       sicp
@@ -120,6 +126,11 @@ values."
                                       simple-httpd
                                       git
                                       ht
+                                      ;; 使用 anki-editor 之前必须先安装 anki 软件和 ankiconnect
+                                      ;; 先安装 anki-editor 然后根据 (2) 页面给出的提示, 安装 ankiconnect
+                                      ;; 1. https://apps.ankiweb.net/   anki 软件安装
+                                      ;; 2. https://foosoft.net/projects/anki-connect/index.html#installation  ankiconnect
+                                      anki-editor
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -369,6 +380,10 @@ values."
    ))
 
 (defun dotspacemacs/user-init ()
+  (setq-default dotspacemacs-configuration-layers '(
+    (scala :variables scala-auto-start-ensime t)))
+  (add-to-list 'configuration-layer-elpa-archives '("melpa-stable" . "stable.melpa.org/packages/"))
+  (add-to-list 'package-pinned-packages '(ensime . "melpa-stable"))
   (setq configuration-layer--elpa-archives
         '(("melpa-cn" . "https://elpa.emacs-china.org/melpa/")
           ("org-cn"   . "https://elpa.emacs-china.org/org/")
@@ -391,6 +406,20 @@ values."
 
 
 (defun dotspacemacs/user-config ()
+
+  (setq org-id-link-to-org-use-id
+      'create-if-interactive-and-no-custom-id)
+
+
+  ;; 这两行代码纠结了我 N 天, 我用 org export to html 每次都是按照
+  ;; 我spacemacs 主体导出的,尤其是代码注释带黑色背景不能忍, 所以纠结了
+  ;; 三天, 最后终于发现了,原来在这里, 发现地址是
+  ;; http://0--key.github.io/emacs/org/export/jekyll/color-src-highlight.html
+  (setq org-html-htmlize-output-type 'css)
+  ;; (setq org-html-htmlize-output-type 'inline-css) ;; default
+  (setq org-html-htmlize-font-prefix "org-")
+  ;; (setq org-html-htmlize-font-prefix "") ;; default
+
   (setq org-reveal-root "file:///home/yiddi/.spacemacs.d/reveal.js")
   ;; anaconda for python settings
   ;; --------------------------------------------------------------
